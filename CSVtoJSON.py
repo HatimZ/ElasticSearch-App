@@ -1,10 +1,12 @@
 import csv
 import json
 
+from es_practice import es_practice_hz
 
-class formatConverter:
 
-    def __init__(self, columns , index_name ):
+class formatConverter(es_practice_hz):
+
+    def __init__(self, columns, index_name ):
         self.columns = columns
         self.index_name = index_name
 

@@ -17,19 +17,71 @@ from CSVtoJSON import formatConverter
 new_database = es_practice_hz()  #creating a client and connecting to the server, if we run this
                               #multiple times no problem as only multiple clients would be created.
 
-#helperClass = formatConverter(["id", "name", "price", "brand", "cpu", "memory", "storage"], "dell_laptop")
-#converted_data = helperClass.convert_format("laptops_data.csv")
-#new_database.bulk_create(converted_data)
+# helperClass = formatConverter(["id", "name", "price", "brand", "cpu", "memory", "storage"], "dell_laptop")
+# converted_data = helperClass.convert_format("laptops_data.csv")
+# new_database.bulk_doc_create(converted_data , "dell_laptop")
 
-search_query = {
+search_query1 = {
     "query": {
         "match":{
             "brand" : "HP"
             
         }
     }
-
-
 }
 
-print (new_database.search_data().search(index = "dell_laptop" , body = search_query))
+search_query2 = {
+  "query": {
+    "range" : { 
+      "price": {
+        "gte": 50000,
+        "lte": 100000
+      }
+  }
+  }
+}
+
+search_query3 = {
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "brand": "HP"
+            
+          }
+        }
+      ]
+      , "should": [
+        {"match": {
+          "attribute_value": "Intel Core i7"
+        }
+          
+        },
+         
+      ]
+      , "filter": [ {
+       "range" : { 
+      "price": {
+        "gte": 50000,
+        "lte": 100000
+      }
+       }
+      }
+      ]
+      
+    }}}
+  
+
+search_query4 = {
+    "query": {
+        "match":{
+            "brand" : "HP"
+            
+        }
+    }
+}
+#new_database.delete_index("dell_laptop")
+new_database.list_allIndex()
+
+print (new_database.search_data(  "dell_laptop" ,search_query4))
